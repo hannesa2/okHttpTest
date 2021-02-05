@@ -1,0 +1,31 @@
+name: PullRequest
+
+on: [pull_request]
+
+jobs:
+  buildTest:
+    name: Build & Test JDK ${{ matrix.java_version }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: [11.0.3 ]
+        os: [ ubuntu-latest, macOS-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - name: Install JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.1.0
+      - name: Unit Test
+        run: ./gradlew testDebugUnitTest
+      - name: Save Reports output
+        uses: actions/upload-artifact@master
+        if: always()
+        with:
+          name: UnitTestReport
+          path: app/build/reports/tests/testDebugUnitTest/classes/info.hannes.okhttp.ResponseTimeTest.html
