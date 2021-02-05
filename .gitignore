@@ -1,0 +1,13 @@
+bin
+gen
+doc
+jar
+build
+.gradle
+.settings
+
+local.properties
+proguard-project.txt
+
+.idea/*
+!.idea/codeStyles/
