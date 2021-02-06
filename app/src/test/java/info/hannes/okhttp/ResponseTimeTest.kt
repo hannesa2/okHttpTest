@@ -25,7 +25,12 @@ class ResponseTimeTest {
         .build()
 
     @Test
-    fun whenConnectTimeoutExceeded_thenSocketTimeoutException3() {
+    fun testInterntWithoutService() {
+        connectTest("http://1.1.1.1", "I")
+    }
+
+    @Test
+    fun testAllIP4AInterfaces() {
         val list = NetworkUtils.getLocalIpAddress()
 
         list.sorted().forEach {
@@ -42,11 +47,10 @@ class ResponseTimeTest {
         val request: Request = Request.Builder()
             .url(server) // non routable address
             .build()
-        val thrown: Throwable = catchThrowable { client.newCall(request).execute() }
+        catchThrowable { client.newCall(request).execute() }
         val end = System.currentTimeMillis()
         val responseTime: Long = end - start
         println("responseTime$preFix $server $responseTime")
-        //assertThat(thrown).isInstanceOf(SocketTimeoutException::class.java)
     }
 
 }
